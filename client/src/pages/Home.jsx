@@ -5,7 +5,7 @@ import Blog from "../components/Blog";
 const Home = () => {
   return (
     <>
-      <Navbar />
+      {/* <Navbar /> */}
       <Blog/>
     </>
   );

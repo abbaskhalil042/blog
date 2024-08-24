@@ -8,31 +8,35 @@ export const signup = async (req, res) => {
 
   try {
     if (!username || !email || !password || !file) {
-      return res.status(400).json("All fields are required");
+      return res.status(400).json({ error: "All fields are required" });
     }
 
-    const user = await User.findOne({ email });
+    const userExists = await User.findOne({ email });
 
-    if (user) return res.status(400).json("User already exists");
+    if (userExists) return res.status(400).json({ error: "User already exists" });
 
     const hashPassword = await bcrypt.hash(password, 10);
+
+    const profileImage = file.path; // Or use file.url if Cloudinary
 
     const newUser = await User.create({
       username,
       email,
       password: hashPassword,
-      profileImage: file.filename, // Correctly access the 'filename' property
+      profileImage, // Store the URL or public_id if using Cloudinary
     });
 
-    res.status(200).json(newUser);
+    res.status(201).json({
+      message: "User created successfully",
+      user: newUser,
+    });
   } catch (error) {
     return res.status(500).json({
-      msg: "Something went wrong while signing up",
+      message: "Something went wrong while signing up",
       error: error.message,
     });
   }
 };
-
 export const login = async (req, res) => {
   const { email, password } = req.body;
 

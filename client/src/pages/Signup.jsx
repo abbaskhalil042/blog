@@ -27,12 +27,13 @@ const Signup = () => {
     }
 
     // You would typically send formData to the server
-    const response = await fetch("/http://localhost:5000/api/user/signup", {
+    const response = await fetch("http://localhost:5000/api/user/signup", {
       method: "POST",
       body: formData,
     });
 
-    navigate("/login");
+    navigate("/login")
+    
 
     console.log(response);
     if (!response.ok) {
