@@ -9,6 +9,7 @@ import NotFound from "./components/NotFound";
 // import { UserProvider, useUser } from "./context/UserContext";
 import Navbar from "./components/Navbar";
 import Delete from "./components/Delete";
+import Read from "./components/Read";
 
 const App = () => {
   return (
@@ -21,8 +22,18 @@ const App = () => {
             path="/create"
             element={<PrivateRoute element={<CreateBlog />} />}
           />
-          <Route path="/update/:id" element={<PrivateRoute element={<Edit />} />} />
-          <Route path="/delete/:id" element={<PrivateRoute element={<Delete />} />} />
+          <Route
+            path="/edit/:id"
+            element={<PrivateRoute element={<Edit />} />}
+          />
+          <Route
+            path="/delete/:id"
+            element={<PrivateRoute element={<Delete />} />}
+          />
+          <Route
+            path="/read/:id"
+            element={<PrivateRoute element={<Read />} />}
+          />
           <Route path="/signup" element={<Signup />} />
           <Route path="/" element={<Login />} />
           <Route path="*" element={<NotFound />} />
@@ -32,7 +43,7 @@ const App = () => {
   );
 };
 
-export default App
+export default App;
 // PrivateRoute Component
 const PrivateRoute = ({ element }) => {
   const userData = JSON.parse(localStorage.getItem("userData"));

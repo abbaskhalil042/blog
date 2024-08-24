@@ -3,8 +3,6 @@ import multer from "multer";
 import { CloudinaryStorage } from "multer-storage-cloudinary";
 import dotenv from "dotenv";
 
-
-
 dotenv.config();
 
 cloudinary.v2.config({
@@ -13,22 +11,18 @@ cloudinary.v2.config({
   api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-
 const storage = new CloudinaryStorage({
   cloudinary: cloudinary.v2,
   params: {
-    folder: "blog",
+    folder: "blog_posts",
     format: async (req, file) => {
       const ext = file.mimetype.split("/")[1];
-      console.log("File extension detected:", ext); // Debugging log
       return ext || "jpg"; // Fallback to 'jpg'
     },
-    public_id: (req, file) =>
-      Date.now() + "_" + file.originalname.split(".")[0],
+    public_id: (req, file) => Date.now() + "_" + file.originalname.split(".")[0],
   },
 });
 
-const uploadProfile = multer({ storage });
-console.log("from multer middleware")
+const uploadPost = multer({ storage });
 
-export default uploadProfile;
+export default uploadPost;

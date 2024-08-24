@@ -18,11 +18,12 @@ const CreateBlog = () => {
     const formData = new FormData();
     formData.append("title", title);
     formData.append("description", description);
-    formData.append("file", file);
+    if (file) {
+      formData.append("file", file); // Ensure the key matches the server-side field name
+    }
 
     try {
       setLoading(true);
-
       const response = await axios.post(
         "http://localhost:5000/api/blog/create",
         formData,
@@ -37,11 +38,11 @@ const CreateBlog = () => {
       setTitle("");
       setDescription("");
       setFile(null);
-      fileInputRef.current.value = "";
+      fileInputRef.current.value = ""; // Clear the file input
       navigate("/home");
     } catch (error) {
       console.error("An error occurred:", error);
-      return setError(error.response.data.message || "An error occurred.");
+      setError(error.response?.data?.msg || "An error occurred.");
     } finally {
       setLoading(false);
     }
@@ -56,17 +57,18 @@ const CreateBlog = () => {
           onChange={(e) => setTitle(e.target.value)}
           placeholder="Title"
           className="py-2 px-6 border border-cyan-700 rounded-lg focus:outline-none"
+          required
         />
-        <input
-          type="textarea"
+        <textarea
           value={description}
           onChange={(e) => setDescription(e.target.value)}
           placeholder="Description"
           className="py-2 px-6 border border-cyan-700 rounded-lg focus:outline-none"
+          required
         />
         <input
           type="file"
-          ref={fileInputRef} // Attach the ref to the file input
+          ref={fileInputRef}
           onChange={(e) => {
             console.log("File selected:", e.target.files[0]);
             setFile(e.target.files[0]);

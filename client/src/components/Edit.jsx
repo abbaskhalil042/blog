@@ -10,17 +10,20 @@ const Edit = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
-  const { id } = useParams(); // Get the blog post ID from the URL
-  const navigate = useNavigate(); // Use to navigate after a successful edit
+  const { id } = useParams();
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchBlog = async () => {
       try {
         const response = await axios.get(`http://localhost:5000/api/blog/${id}`);
-        const { title, description, image } = response.data;
+        const { post } = response.data; // Extract the post object
+        const { title, description, file } = post; // Adjust based on actual response keys
+
         setTitle(title);
         setDescription(description);
-        setCurrentImage(image); // Set the current image URL
+        setCurrentImage(file); // Update based on the correct key
+        console.log("Fetched blog data from edit:", { title, description, file });
       } catch (error) {
         console.error("Error fetching blog data:", error);
         setError("Failed to load blog data.");
@@ -48,8 +51,7 @@ const Edit = () => {
           "Content-Type": "multipart/form-data",
         },
       });
-
-      navigate(`/blog/${id}`); // Redirect to the blog post page after successful edit
+      navigate(`/home`);
     } catch (error) {
       console.error("Error updating blog post:", error);
       setError("Failed to update the blog post.");
@@ -78,7 +80,7 @@ const Edit = () => {
           {currentImage && (
             <div>
               <img
-                src={`http://localhost:5000/uploads/${currentImage}`}
+                src={currentImage}
                 alt="Current"
                 className="mb-2"
                 style={{ maxWidth: "100px", maxHeight: "100px" }}
